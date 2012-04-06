@@ -3,5 +3,8 @@
 
     <string name="hello">Hello World, TremorListActivity!</string>
     <string name="app_name">BootcampTwo</string>
+    <string name="usgs_url">http://earthquake.usgs.gov/earthquakes/shakemap/rss.xml</string>
 
+    <string name="default_row_text">Loading&#8230;</string>
+    <string name="network_error_message">Unable to establish a network connection. Please try again.</string>
 </resources>
