@@ -8,11 +8,14 @@ import com.captech.mehalso.tremorfeed.remote.TremorRetriever;
 
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 public class TremorListActivity extends ListActivity {
@@ -25,6 +28,7 @@ public class TremorListActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        
         arrayAdapter = new TremorArrayAdapter(this);
         setListAdapter(arrayAdapter);
         
@@ -33,8 +37,29 @@ public class TremorListActivity extends ListActivity {
         } else {
         	handleNetworkError();
         }
-        
-        
+    }
+    
+    /**
+     * Register the settings menu item.  
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	menu.add(Menu.NONE, 0, 0, "Settings");
+    	return super.onCreateOptionsMenu(menu);
+    }
+    
+    /**
+     * Start up the preferences view.
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	switch(item.getItemId()) {
+    	case 0:
+    		startActivity(new Intent(this, TremorPreferencesActivity.class));
+    		return true;
+    	}
+    	
+    	return false;
     }
     
     /**

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <PreferenceCategory android:key="@string/preferences_category_id" android:title="@string/preferences_category">
+        <CheckBoxPreference android:key="@string/pref_refresh_id" android:title="@string/pref_refresh_title" android:summaryOff="@string/pref_refresh_off" android:summary="@string/pref_refresh_desc" android:summaryOn="@string/pref_refresh_on"/>
+    </PreferenceCategory>
+    
+
+</PreferenceScreen>

@@ -7,4 +7,12 @@
 
     <string name="default_row_text">Loading&#8230;</string>
     <string name="network_error_message">Unable to establish a network connection. Please try again.</string>
+    <string name="preferences_category">Refresh Behavior</string>
+    <string name="preferences_category_id">pref_cat1</string>
+    <string name="pref_refresh_on">All earthquake data will be reloaded on refresh.</string>
+    <string name="pref_refresh_off">Only new earthquake entries will be added on refresh.</string>
+    <string name="pref_refresh_id">pref_refresh_id</string>
+    <string name="pref_refresh_title">Flush Entries on Refresh</string>
+    <string name="pref_refresh_desc">"Whether we should flush the earthquake entries during a refresh. If unchecked, we keep existing entries intact.  "</string>
+    <string name="pref_activity_name">.TremorPreferencesActivity</string>
 </resources>
