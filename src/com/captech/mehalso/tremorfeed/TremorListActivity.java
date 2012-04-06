@@ -99,7 +99,7 @@ public class TremorListActivity extends ListActivity {
 			//TODO: Sort records based on date.
 			
 			Log.v(TremorConstants.LOG_TAG, "Leave doInBackground() - records [" + 
-					records == null ? "null" : records.size() + "]");
+					(records == null ? "null" : records.size()) + "]");
 			
 			return records;
 		}

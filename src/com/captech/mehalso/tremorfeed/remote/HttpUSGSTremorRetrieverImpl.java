@@ -105,7 +105,9 @@ public class HttpUSGSTremorRetrieverImpl implements TremorRetriever {
 				if(TremorConstants.XML_TAG_ITEM.equals(tagName)) {
 					record = new TremorRecord();
 				} else if(record != null) {
+					//String val = parser.nextText();
 					String val = parser.getText();
+					
 					Log.v(TremorConstants.LOG_TAG, "XML Parsing---> Value [" + val + "]");
 					
 					if(TremorConstants.XML_TAG_TITLE.equals(tagName)) {
