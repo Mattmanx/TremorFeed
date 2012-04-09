@@ -124,7 +124,7 @@ public class HttpUSGSTremorRetrieverImpl implements TremorRetriever {
 					} else if(TremorConstants.XML_TAG_REGION.equals(tagName)) {
 						record.setRegion(val);
 					} else if(TremorConstants.XML_TAG_SECONDS.equals(tagName)) {
-						record.setEventDateUtc(new Date(Long.parseLong(val)));
+						record.setEventDateUtc(new Date(Long.parseLong(val) * 1000));
 					} else if(TremorConstants.XML_TAG_SUBJECT.equals(tagName)) {
 						record.setFloorMag(Integer.valueOf(val));
 					}

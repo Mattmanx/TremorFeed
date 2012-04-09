@@ -53,6 +53,15 @@ public class TremorArrayAdapter extends ArrayAdapter<TremorRecord> {
 		holder.text.setText(record.getTitle());
 		
 		//TODO: Decorate based on magnitude. 
+		if(record.getFloorMag().intValue() >= 5 && 
+				record.getFloorMag().intValue() < 7) {
+			rowView.setBackgroundColor(android.R.color.holo_red_light);
+		} else if(record.getFloorMag().intValue() >= 7){
+			rowView.setBackgroundColor(android.R.color.holo_red_dark);
+		} else {
+			rowView.setBackgroundColor(android.R.color.black); 
+		}
+		
 		//TODO: Add on-click listener
 		
 		return rowView;
