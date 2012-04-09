@@ -17,4 +17,6 @@
     <string name="pref_refresh_desc">"Whether we should flush the earthquake entries during a refresh. If unchecked, we keep existing entries intact.  "</string>
     <string name="pref_activity_name">.TremorPreferencesActivity</string>
     <string name="menu_refresh">Refresh Data</string>
+    <string name="menu_refresh_action_description">Refreshing&#8230;</string>
+    <string name="menu_settings">Settings</string>
 </resources>

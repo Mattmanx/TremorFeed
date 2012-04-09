@@ -30,11 +30,9 @@ import com.captech.mehalso.tremorfeed.pojo.TremorRecord;
 public class HttpUSGSTremorRetrieverImpl implements TremorRetriever {
 
 	private String httpUrl;
-	private HttpClient httpClient;
-	
+		
 	public HttpUSGSTremorRetrieverImpl(String httpUrl) {
 		setHttpUrl(httpUrl);
-		this.httpClient = AndroidHttpClient.newInstance(TremorConstants.HTTP_USER_AGENT);	//use default settings.
 	}
 	
 	/* (non-Javadoc)
@@ -47,7 +45,11 @@ public class HttpUSGSTremorRetrieverImpl implements TremorRetriever {
 			throw new RuntimeException("No URL provided for USGS RSS Feed. Unable to continue.");
 		}
 		
+		AndroidHttpClient httpClient = null;
+		
 		try {
+			httpClient = AndroidHttpClient.newInstance(TremorConstants.HTTP_USER_AGENT);
+			
 			Collection<TremorRecord> records;
 		
 			HttpGet request = new HttpGet(getHttpUrl());
@@ -73,6 +75,10 @@ public class HttpUSGSTremorRetrieverImpl implements TremorRetriever {
 			Log.e(TremorConstants.LOG_TAG, "Error obtaining earthquake data from URL [" + getHttpUrl() + "].", t);
 			
 			throw new RuntimeException("Error obtaining earthquake data from URL [" + getHttpUrl() + "].", t);
+		} finally {
+			if(httpClient != null) 
+				httpClient.close(); 
+			httpClient = null;
 		}
 	}
 
@@ -127,6 +133,8 @@ public class HttpUSGSTremorRetrieverImpl implements TremorRetriever {
 						record.setEventDateUtc(new Date(Long.parseLong(val) * 1000));
 					} else if(TremorConstants.XML_TAG_SUBJECT.equals(tagName)) {
 						record.setFloorMag(Integer.valueOf(val));
+					} else if(TremorConstants.XML_TAG_URL.equals(tagName)) {
+						record.setUrl(val);
 					}
 				}
 				

@@ -21,6 +21,7 @@ public class TremorConstants {
 	public static final String XML_TAG_SECONDS = "seconds";
 	public static final String XML_TAG_DEPTH = "depth";
 	public static final String XML_TAG_REGION = "region";
+	public static final String XML_TAG_URL = "link";
 	
 	//Wed, 04 Apr 2012 16:37:04 +0000
 	public static final String USGS_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss Z";

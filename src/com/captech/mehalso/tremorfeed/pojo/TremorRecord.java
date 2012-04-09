@@ -171,6 +171,49 @@ public class TremorRecord {
 				+ ", floorMag=" + floorMag + ", eventDateUtc=" + eventDateUtc
 				+ ", depthKm=" + depthKm + ", region=" + region + "]";
 	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((url == null) ? 0 : url.hashCode());
+		return result;
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TremorRecord other = (TremorRecord) obj;
+		if (url == null) {
+			if (other.url != null)
+				return false;
+		} else if (!url.equals(other.url))
+			return false;
+		return true;
+	}
 	
-	
+	/**
+	 * Used when we have to merge existing records together.  Copy newer records values. 
+	 * @param otherRecord
+	 */
+	public void copyValues(TremorRecord otherRecord) {
+		this.setDepthKm(otherRecord.getDepthKm());
+		this.setDescriptionHtml(otherRecord.getDescriptionHtml());
+		this.setEventDateUtc(otherRecord.getEventDateUtc());
+		this.setFloorMag(otherRecord.getFloorMag());
+		this.setLatitude(otherRecord.getLatitude());
+		this.setLongitude(otherRecord.getLongitude());
+		this.setPubDate(otherRecord.getPubDate());
+		this.setRegion(otherRecord.getRegion());
+		this.setTitle(otherRecord.getTitle());
+	}
 }
