@@ -1,13 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:orientation="vertical" >
+    android:layout_height="200sp"
+    android:minHeight="200sp">
     <TextView
-        android:id="@+id/textView1"
-        android:layout_width="match_parent"
+        android:id="@+id/row_magFloor"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:text="@string/default_row_mag"
+        android:textSize="36sp" 
         android:layout_height="match_parent"
+        android:width="200sp" />
+    
+    <!-- Need to use a theme for some of these attributes. -->
+    <TextView
+        android:id="@+id/row_title"
         android:text="@string/default_row_text"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textStyle="bold" />
-</LinearLayout>
+        android:layout_toRightOf="@id/row_magFloor"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:layout_height="wrap_content" />
+    
+    <TextView
+        android:id="@+id/row_date_time"
+        android:layout_toRightOf="@id/row_magFloor"
+        android:layout_below="@id/row_title"
+        android:text="@string/default_row_date"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:layout_height="wrap_content" />
+    
+    <TextView
+        android:id="@+id/row_lat_long"
+        android:layout_toRightOf="@id/row_magFloor"
+        android:layout_below="@id/row_date_time"
+        android:text="@string/default_row_lat_long"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:layout_height="wrap_content" />
+    
+</RelativeLayout>

@@ -30,6 +30,7 @@ public class TremorListActivity extends ListActivity {
 	//cache this so we don't have to inflate it again and again.
 	private ImageView refreshActionView;
 	private Animation refreshAnimation;
+	private MenuItem refreshActionItem;
 	
 	/**
 	 * 
@@ -41,12 +42,6 @@ public class TremorListActivity extends ListActivity {
         
         arrayAdapter = new TremorArrayAdapter(this);
         setListAdapter(arrayAdapter);
-        
-        if(isNetworkAvailable()) {
-        	fireTremorQuery(null);
-        } else {
-        	handleNetworkError();
-        }
     }
     
     /**
@@ -56,6 +51,17 @@ public class TremorListActivity extends ListActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_menu, menu);
+        
+        refreshActionItem = menu.findItem(R.id.menu_refresh);
+        
+        //Once the menu is created, we'll fire our first data query.  
+        //We wait until now because the menu contains our only way of 
+        //telling the user that a load is occurring.  
+        if(isNetworkAvailable()) {
+        	fireTremorQuery();
+        } else {
+        	handleNetworkError();
+        }
         
         return true;
     }
@@ -70,7 +76,7 @@ public class TremorListActivity extends ListActivity {
     		startActivity(new Intent(this, TremorPreferencesActivity.class));
     		return true;
     	case R.id.menu_refresh:
-    		fireTremorQuery(item);
+    		fireTremorQuery();
     		return true;
     	}
     	
@@ -80,9 +86,9 @@ public class TremorListActivity extends ListActivity {
     /**
      * 
      */
-    private void fireTremorQuery(MenuItem itemToAnimate) {
+    private void fireTremorQuery() {
     	//Start refresh animation.
-    	if(itemToAnimate != null) {
+    	if(refreshActionItem != null) {
 	    	if(refreshActionView == null) {
 	    		refreshActionView = (ImageView) getLayoutInflater().inflate(R.layout.refresh_action_view, null);
 	    		refreshAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate);
@@ -91,11 +97,11 @@ public class TremorListActivity extends ListActivity {
     	
 	    	refreshActionView.startAnimation(refreshAnimation);
     	
-	    	itemToAnimate.setActionView(refreshActionView);
+	    	refreshActionItem.setActionView(refreshActionView);
     	}
     	
     	//Fire task
-    	new TremorQueryTask(itemToAnimate).execute(getString(R.string.usgs_url));
+    	new TremorQueryTask().execute(getString(R.string.usgs_url));
     }
     
     /**
@@ -129,13 +135,7 @@ public class TremorListActivity extends ListActivity {
      *
      */
     private class TremorQueryTask extends AsyncTask<String,Void,Collection<TremorRecord>> {
-
-    	MenuItem itemToAnimate = null;
     	
-    	TremorQueryTask(MenuItem item) {
-    		super();
-    		itemToAnimate = item;
-    	}
     	
     	/**
     	 * 
@@ -169,9 +169,9 @@ public class TremorListActivity extends ListActivity {
 		@Override
 		protected void onPostExecute(Collection<TremorRecord> records) {
 			//stop refresh animation.
-			if(itemToAnimate != null) {
-				itemToAnimate.getActionView().clearAnimation();
-				itemToAnimate.setActionView(null);
+			if(refreshActionItem != null) {
+				refreshActionItem.getActionView().clearAnimation();
+				refreshActionItem.setActionView(null);
 			}
 			
 			if(records == null) {

@@ -3,6 +3,7 @@
  */
 package com.captech.mehalso.tremorfeed;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -24,12 +25,16 @@ import android.widget.TextView;
 public class TremorArrayAdapter extends ArrayAdapter<TremorRecord> {
 	private final Activity context;
 	private List<TremorRecord> deletedRecords = new ArrayList<TremorRecord>();
+	private String dateFormat = null;
 	
 	Object syncLock = new Object();
 	
 	static class ViewHolder {
 		//This should match our row item layout.
-		public TextView text;
+		public TextView magFloor;
+		public TextView title;
+		public TextView dateTime;
+		public TextView latLong;
 	}
 	
 	/** 
@@ -39,6 +44,7 @@ public class TremorArrayAdapter extends ArrayAdapter<TremorRecord> {
 	public TremorArrayAdapter(Activity context) {
 		super(context, R.layout.row_layout);
 		this.context = context;
+		dateFormat = context.getString(R.string.row_date_format);
 	}
 	
 	/**
@@ -69,9 +75,11 @@ public class TremorArrayAdapter extends ArrayAdapter<TremorRecord> {
 		if(rowView == null) {
 			rowView = context.getLayoutInflater().inflate(R.layout.row_layout, null);
 			ViewHolder viewHolder = new ViewHolder();
-			viewHolder.text = (TextView) rowView.findViewById(R.id.textView1);
-			
-			//TODO: Update this as I get my row layout figured out. 
+			viewHolder.title = (TextView) rowView.findViewById(R.id.row_title);
+			viewHolder.magFloor = (TextView) rowView.findViewById(R.id.row_magFloor);
+			viewHolder.latLong = (TextView) rowView.findViewById(R.id.row_lat_long);
+			viewHolder.dateTime = (TextView) rowView.findViewById(R.id.row_date_time);
+			 
 			rowView.setTag(viewHolder);
 		}
 		
@@ -79,16 +87,24 @@ public class TremorArrayAdapter extends ArrayAdapter<TremorRecord> {
 		
 		//TODO: Update this as I get my row layout figured out.
 		TremorRecord record = getItem(position);
-		holder.text.setText(record.getTitle());
+		holder.title.setText(record.getTitle());
+		holder.magFloor.setText(record.getFloorMag().toString());
+		
+		//sdf not threadsafe... can I be sure that this method will always 
+		//get called on the UI thread? 
+		SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+		
+		holder.dateTime.setText(sdf.format(record.getEventDateUtc()));
+		holder.latLong.setText(record.getLatitude() + " by " + record.getLongitude());
 		
 		//TODO: Decorate based on magnitude. 
 		if(record.getFloorMag().intValue() >= 5 && 
 				record.getFloorMag().intValue() < 7) {
-			rowView.setBackgroundColor(android.R.color.holo_red_light);
+			//light red
 		} else if(record.getFloorMag().intValue() >= 7){
-			rowView.setBackgroundColor(android.R.color.holo_red_dark);
+			//dark red
 		} else {
-			rowView.setBackgroundColor(android.R.color.black); 
+			//normal 
 		}
 		
 		//TODO: Add on-click listener

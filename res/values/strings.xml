@@ -5,8 +5,14 @@
     <string name="app_name">BootcampTwo</string>
     <string name="usgs_url">http://earthquake.usgs.gov/earthquakes/shakemap/rss.xml</string>
     <!--<string name="usgs_url">http://localhost:9090/sample_rss.xml</string> -->
+	
+	<string name="row_date_format">dd MMM yyyy HH:mm:ss</string>
 
-    <string name="default_row_text">Loading&#8230;</string>
+    <string name="default_row_text">Title</string>
+    <string name="default_row_mag">#</string>
+    <string name="default_row_date">Date/Time Not Available</string>
+    <string name="default_row_lat_long">[???.???, ???.???]</string>
+    
     <string name="network_error_message">Unable to establish a network connection. Please try again.</string>
     <string name="preferences_category">Refresh Behavior</string>
     <string name="preferences_category_id">pref_cat1</string>
