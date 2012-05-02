@@ -12,6 +12,8 @@ import com.captech.mehalso.tremorfeed.pojo.TremorRecord;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,11 +57,11 @@ public class TremorArrayAdapter extends ArrayAdapter<TremorRecord> {
 		this.sort(new Comparator<TremorRecord>() {
 			public int compare(TremorRecord lhs, TremorRecord rhs) {
 				if(lhs.getEventDateUtc().after(rhs.getEventDateUtc())) {
-					return 1;
+					return -1;
 				} else if(lhs.getEventDateUtc().equals(rhs.getEventDateUtc())) {
 					return 0;
 				} else {
-					return -1;
+					return 1;
 				}
 			}
 		});
@@ -85,7 +87,6 @@ public class TremorArrayAdapter extends ArrayAdapter<TremorRecord> {
 		
 		ViewHolder holder = (ViewHolder) rowView.getTag();
 		
-		//TODO: Update this as I get my row layout figured out.
 		TremorRecord record = getItem(position);
 		holder.title.setText(record.getTitle());
 		holder.magFloor.setText(record.getFloorMag().toString());
@@ -95,20 +96,25 @@ public class TremorArrayAdapter extends ArrayAdapter<TremorRecord> {
 		SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
 		
 		holder.dateTime.setText(sdf.format(record.getEventDateUtc()));
-		holder.latLong.setText(record.getLatitude() + " by " + record.getLongitude());
+		holder.latLong.setText("Location [" + record.getLatitude() + ", " + record.getLongitude() + "]");
 		
-		//TODO: Decorate based on magnitude. 
 		if(record.getFloorMag().intValue() >= 5 && 
 				record.getFloorMag().intValue() < 7) {
-			//light red
+			holder.magFloor.setTextColor(Color.rgb(255, 0, 0));
+			//UAT has preferred no background on the medium size eq's
+			//rowView.setBackgroundResource(R.color.large_quake_row_color);
+			rowView.setBackgroundResource(R.color.normal_row_color);
 		} else if(record.getFloorMag().intValue() >= 7){
 			//dark red
+			holder.magFloor.setTextColor(Color.rgb(128, 0, 0));
+			rowView.setBackgroundResource(R.color.huge_quake_row_color);
 		} else {
 			//normal 
+			holder.magFloor.setTextColor(Color.BLACK);
+			rowView.setBackgroundResource(R.color.normal_row_color);
 		}
 		
-		//TODO: Add on-click listener
-		
+
 		return rowView;
 	}
 	

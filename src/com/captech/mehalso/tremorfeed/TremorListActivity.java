@@ -16,12 +16,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class TremorListActivity extends ListActivity {
@@ -42,6 +45,41 @@ public class TremorListActivity extends ListActivity {
         
         arrayAdapter = new TremorArrayAdapter(this);
         setListAdapter(arrayAdapter);
+        
+        //Handle Action Mode
+        ListView myView = getListView();
+        myView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		myView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+			
+			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			public void onDestroyActionMode(ActionMode mode) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+				//mode.setTitle(R.string.action_mode_title);
+		        // Inflate the menu for the CAB
+		        MenuInflater inflater = mode.getMenuInflater();
+		        inflater.inflate(R.menu.action_mode_menu, menu);
+		        return true;
+			}
+			
+			public boolean onActionItemClicked(ActionMode mode, MenuItem menu) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			public void onItemCheckedStateChanged(ActionMode mode, int position,
+					long id, boolean checked) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
     }
     
     /**
