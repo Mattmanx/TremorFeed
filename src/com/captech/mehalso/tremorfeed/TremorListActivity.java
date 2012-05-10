@@ -1,15 +1,19 @@
 package com.captech.mehalso.tremorfeed;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import com.captech.mehalso.tremorfeed.pojo.TremorRecord;
 import com.captech.mehalso.tremorfeed.remote.HttpUSGSTremorRetrieverImpl;
 import com.captech.mehalso.tremorfeed.remote.TremorRetriever;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -28,12 +32,17 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class TremorListActivity extends ListActivity {
+	static final int CONFIRM_DELETE_DIALOG = 1;
+	
 	private TremorArrayAdapter arrayAdapter;
 	
 	//cache this so we don't have to inflate it again and again.
 	private ImageView refreshActionView;
 	private Animation refreshAnimation;
 	private MenuItem refreshActionItem;
+	
+	private List<TremorRecord> selectedItems = new ArrayList<TremorRecord>();
+	private int numSelected = 0;
 	
 	/**
 	 * 
@@ -48,17 +57,16 @@ public class TremorListActivity extends ListActivity {
         
         //Handle Action Mode
         ListView myView = getListView();
-        myView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-		myView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
-			
+        myView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);	
+		myView.setMultiChoiceModeListener(new MultiChoiceModeListener() {				
 			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
 				// TODO Auto-generated method stub
 				return false;
 			}
 			
 			public void onDestroyActionMode(ActionMode mode) {
-				// TODO Auto-generated method stub
-				
+				numSelected = 0;	
+				selectedItems.clear();
 			}
 			
 			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -69,17 +77,55 @@ public class TremorListActivity extends ListActivity {
 		        return true;
 			}
 			
+			/**
+			 * Will attempt to delete selected items if the delete button is clicked.
+			 * 
+			 */
 			public boolean onActionItemClicked(ActionMode mode, MenuItem menu) {
-				// TODO Auto-generated method stub
-				return false;
+				boolean retValue = false;
+				
+				switch(menu.getItemId()) {
+				case R.id.action_mode_delete:
+					showDialog(CONFIRM_DELETE_DIALOG);
+					retValue = true;
+					break;
+				default:
+					retValue = false;
+					break;
+				}
+				
+				return retValue;
 			}
 			
 			public void onItemCheckedStateChanged(ActionMode mode, int position,
 					long id, boolean checked) {
-				// TODO Auto-generated method stub
+				TremorRecord record = arrayAdapter.getItem(position);
 				
+				if(checked) {
+					numSelected++;
+					selectedItems.add(record);
+				} else {
+					numSelected--;
+					selectedItems.remove(record);
+				}
+				
+				mode.setTitle(numSelected + " " + getString(R.string.action_mode_title));
 			}
 		});
+    }
+    
+    /**
+     * Prompts the user to confirm deletion with an AlertDialog. Deletes
+     * if the user accepts, otherwise returns false.  
+     * @param items
+     * @return
+     */
+    public void deleteSelectedTremors() {
+		for(TremorRecord record : selectedItems) {
+			arrayAdapter.delete(record);
+		}
+		
+		selectedItems.clear();
     }
     
     /**
@@ -165,6 +211,36 @@ public class TremorListActivity extends ListActivity {
             return true;
         }
         return false;
+    }
+    
+    /**
+     * Create the delete confirmation dialog.
+     */
+    protected Dialog onCreateDialog(int id) {
+    	Dialog dialog;
+    	switch(id) {
+    	case CONFIRM_DELETE_DIALOG:
+    		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    		builder.setMessage(R.string.delete_dialog_text)
+    		       .setCancelable(false)
+    		       .setPositiveButton(R.string.delete_dialog_yes, new DialogInterface.OnClickListener() {
+    		           public void onClick(DialogInterface dialog, int id) {
+    		        	   TremorListActivity.this.deleteSelectedTremors();
+    		           }
+    		       })
+    		       .setNegativeButton(R.string.delete_dialog_cancel, new DialogInterface.OnClickListener() {
+    		           public void onClick(DialogInterface dialog, int id) {
+    		        	   dialog.cancel();
+    		           }
+    		       });
+    		dialog = builder.create();
+    		break;
+		default:
+			dialog = null;
+			break;
+    	}
+    	
+    	return dialog;
     }
     
     /**

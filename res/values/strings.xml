@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, TremorListActivity!</string>
-    <string name="app_name">BootcampTwo</string>
+    <string name="app_name">TremorFeed</string>
     <string name="usgs_url">http://earthquake.usgs.gov/earthquakes/shakemap/rss.xml</string>
     <!--<string name="usgs_url">http://localhost:9090/sample_rss.xml</string> -->
 	
@@ -26,6 +25,10 @@
     <string name="menu_refresh_action_description">Refreshing&#8230;</string>
     <string name="menu_settings">Settings</string>
     
-    <string name="action_mode_title">Choose Earthquakes</string>
+    <string name="action_mode_title">Tremors Selected</string>
     <string name="action_mode_delete">Delete</string>
+    
+    <string name="delete_dialog_text">Are you sure you want to remove these records?</string>
+    <string name="delete_dialog_cancel">Cancel</string>
+    <string name="delete_dialog_yes">Yes</string>
 </resources>
