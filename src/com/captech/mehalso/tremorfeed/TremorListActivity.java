@@ -56,9 +56,6 @@ public class TremorListActivity extends ListActivity {
         mArrayAdapter = new TremorArrayAdapter(this);
         setListAdapter(mArrayAdapter);
         
-        this.getListView().setSelector(R.drawable.list_background);
-        this.getListView().setDrawSelectorOnTop(true);
-        
         //Handle Action Mode
         ListView myView = getListView();
         myView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);	
