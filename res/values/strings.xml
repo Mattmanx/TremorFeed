@@ -13,6 +13,8 @@
     <string name="default_row_lat_long">[???.???, ???.???]</string>
     
     <string name="network_error_message">Unable to establish a network connection. Please try again.</string>
+    <string name="url_error_message">Unable to determine internet address for earthquake. Diverting to www.google.com.</string>
+    
     <string name="preferences_category">Refresh Behavior</string>
     <string name="preferences_category_id">pref_cat1</string>
     <string name="pref_refresh_on">All earthquake data will be reloaded on refresh.</string>

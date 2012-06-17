@@ -113,7 +113,7 @@ public class TremorArrayAdapter extends ArrayAdapter<TremorRecord> {
 			holder.magFloor.setTextColor(Color.BLACK);
 			rowView.setBackgroundResource(R.color.normal_row_color);
 		}
-
+		
 		return rowView;
 	}
 	

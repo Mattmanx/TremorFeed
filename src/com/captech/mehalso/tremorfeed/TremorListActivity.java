@@ -24,9 +24,12 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView.MultiChoiceModeListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -58,6 +61,18 @@ public class TremorListActivity extends ListActivity {
         
         //Handle Action Mode
         ListView myView = getListView();
+        
+        myView.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                    int position, long id) {
+        		String usgsUrl = mArrayAdapter.getItem(position).getUrl();
+        		Intent intent = new Intent(TremorListActivity.this, TremorWebActivity.class);
+        		intent.putExtra(TremorConstants.USGS_URL_KEY, usgsUrl);
+        		
+        		startActivity(intent);
+        	}
+		});
+        
         myView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);	
 		myView.setMultiChoiceModeListener(new MultiChoiceModeListener() {				
 			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -197,9 +212,8 @@ public class TremorListActivity extends ListActivity {
      * 
      */
     private void handleNetworkError() {
-    	//TODO: Notify the user gracefully!!!
-    	//for now:
-    	Toast.makeText(this, R.string.network_error_message, 10);
+    	Toast toast = Toast.makeText(this, R.string.network_error_message, Toast.LENGTH_LONG);
+    	toast.show();
     }
     
     /**

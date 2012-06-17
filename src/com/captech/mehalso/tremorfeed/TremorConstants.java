@@ -25,4 +25,6 @@ public class TremorConstants {
 	
 	//Wed, 04 Apr 2012 16:37:04 +0000
 	public static final String USGS_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss Z";
+	
+	public static final String USGS_URL_KEY = "USGS_URL";
 }
