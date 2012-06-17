@@ -34,15 +34,16 @@ import android.widget.Toast;
 public class TremorListActivity extends ListActivity {
 	static final int CONFIRM_DELETE_DIALOG = 1;
 	
-	private TremorArrayAdapter arrayAdapter;
+	private TremorArrayAdapter mArrayAdapter;
+	private ActionMode mActionMode;
 	
 	//cache this so we don't have to inflate it again and again.
-	private ImageView refreshActionView;
-	private Animation refreshAnimation;
-	private MenuItem refreshActionItem;
+	private ImageView mRefreshActionView;
+	private Animation mRefreshAnimation;
+	private MenuItem mRefreshActionItem;
 	
-	private List<TremorRecord> selectedItems = new ArrayList<TremorRecord>();
-	private int numSelected = 0;
+	private List<TremorRecord> mSelectedItems = new ArrayList<TremorRecord>();
+	private int mNumSelectedItems = 0;
 	
 	/**
 	 * 
@@ -52,8 +53,11 @@ public class TremorListActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         
         
-        arrayAdapter = new TremorArrayAdapter(this);
-        setListAdapter(arrayAdapter);
+        mArrayAdapter = new TremorArrayAdapter(this);
+        setListAdapter(mArrayAdapter);
+        
+        this.getListView().setSelector(R.drawable.list_background);
+        this.getListView().setDrawSelectorOnTop(true);
         
         //Handle Action Mode
         ListView myView = getListView();
@@ -65,8 +69,9 @@ public class TremorListActivity extends ListActivity {
 			}
 			
 			public void onDestroyActionMode(ActionMode mode) {
-				numSelected = 0;	
-				selectedItems.clear();
+				mNumSelectedItems = 0;	
+				mSelectedItems.clear();
+				mActionMode = null;
 			}
 			
 			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -74,6 +79,9 @@ public class TremorListActivity extends ListActivity {
 		        // Inflate the menu for the CAB
 		        MenuInflater inflater = mode.getMenuInflater();
 		        inflater.inflate(R.menu.action_mode_menu, menu);
+		        
+		        mActionMode = mode;
+		        
 		        return true;
 			}
 			
@@ -99,17 +107,17 @@ public class TremorListActivity extends ListActivity {
 			
 			public void onItemCheckedStateChanged(ActionMode mode, int position,
 					long id, boolean checked) {
-				TremorRecord record = arrayAdapter.getItem(position);
+				TremorRecord record = mArrayAdapter.getItem(position);
 				
 				if(checked) {
-					numSelected++;
-					selectedItems.add(record);
+					mNumSelectedItems++;
+					mSelectedItems.add(record);
 				} else {
-					numSelected--;
-					selectedItems.remove(record);
+					mNumSelectedItems--;
+					mSelectedItems.remove(record);
 				}
 				
-				mode.setTitle(numSelected + " " + getString(R.string.action_mode_title));
+				mode.setTitle(mNumSelectedItems + " " + getString(R.string.action_mode_title));
 			}
 		});
     }
@@ -121,11 +129,11 @@ public class TremorListActivity extends ListActivity {
      * @return
      */
     public void deleteSelectedTremors() {
-		for(TremorRecord record : selectedItems) {
-			arrayAdapter.delete(record);
+		for(TremorRecord record : mSelectedItems) {
+			mArrayAdapter.delete(record);
 		}
 		
-		selectedItems.clear();
+		mActionMode.finish();
     }
     
     /**
@@ -136,7 +144,7 @@ public class TremorListActivity extends ListActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_menu, menu);
         
-        refreshActionItem = menu.findItem(R.id.menu_refresh);
+        mRefreshActionItem = menu.findItem(R.id.menu_refresh);
         
         //Once the menu is created, we'll fire our first data query.  
         //We wait until now because the menu contains our only way of 
@@ -172,16 +180,16 @@ public class TremorListActivity extends ListActivity {
      */
     private void fireTremorQuery() {
     	//Start refresh animation.
-    	if(refreshActionItem != null) {
-	    	if(refreshActionView == null) {
-	    		refreshActionView = (ImageView) getLayoutInflater().inflate(R.layout.refresh_action_view, null);
-	    		refreshAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate);
-	    		refreshAnimation.setRepeatCount(Animation.INFINITE);
+    	if(mRefreshActionItem != null) {
+	    	if(mRefreshActionView == null) {
+	    		mRefreshActionView = (ImageView) getLayoutInflater().inflate(R.layout.refresh_action_view, null);
+	    		mRefreshAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate);
+	    		mRefreshAnimation.setRepeatCount(Animation.INFINITE);
 	    	}
     	
-	    	refreshActionView.startAnimation(refreshAnimation);
+	    	mRefreshActionView.startAnimation(mRefreshAnimation);
     	
-	    	refreshActionItem.setActionView(refreshActionView);
+	    	mRefreshActionItem.setActionView(mRefreshActionView);
     	}
     	
     	//Fire task
@@ -283,9 +291,9 @@ public class TremorListActivity extends ListActivity {
 		@Override
 		protected void onPostExecute(Collection<TremorRecord> records) {
 			//stop refresh animation.
-			if(refreshActionItem != null) {
-				refreshActionItem.getActionView().clearAnimation();
-				refreshActionItem.setActionView(null);
+			if(mRefreshActionItem != null) {
+				mRefreshActionItem.getActionView().clearAnimation();
+				mRefreshActionItem.setActionView(null);
 			}
 			
 			if(records == null) {
@@ -294,7 +302,7 @@ public class TremorListActivity extends ListActivity {
 				//check preferences to see whether we should flush data...
 				if(PreferenceManager.getDefaultSharedPreferences(TremorListActivity.this)
 						.getBoolean(getString(R.string.pref_refresh_id), Boolean.TRUE)) {
-					arrayAdapter.clear();
+					mArrayAdapter.clear();
 				}
 				
 				//Note - we may not want to perform this add() on the UI thread for huge data sets.  For now, 
@@ -302,9 +310,9 @@ public class TremorListActivity extends ListActivity {
 				// anyway, so this is probably the best bet other than writing a completely custom collection-backed
 				// list view adapter with a synchronized data set.  
 				for(TremorRecord record : records) 
-					arrayAdapter.add(record);
+					mArrayAdapter.add(record);
 				
-				arrayAdapter.sortRecordsByDate();
+				mArrayAdapter.sortRecordsByDate();
 			}
 		}
     }
