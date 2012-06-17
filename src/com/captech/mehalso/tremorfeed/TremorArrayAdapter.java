@@ -103,15 +103,15 @@ public class TremorArrayAdapter extends ArrayAdapter<TremorRecord> {
 			holder.magFloor.setTextColor(Color.rgb(255, 0, 0));
 			//no background on the medium size eq's = better UX
 			//rowView.setBackgroundResource(R.color.large_quake_row_color);
-			//rowView.setBackgroundResource(R.color.normal_row_color);
+			rowView.setBackgroundResource(R.color.normal_row_color);
 		} else if(record.getFloorMag().intValue() >= 7){
 			//dark red
 			holder.magFloor.setTextColor(Color.rgb(128, 0, 0));
-			//rowView.setBackgroundResource(R.color.huge_quake_row_color);
+			rowView.setBackgroundResource(R.color.huge_quake_row_color);
 		} else {
 			//normal 
 			holder.magFloor.setTextColor(Color.BLACK);
-			//rowView.setBackgroundResource(R.color.normal_row_color);
+			rowView.setBackgroundResource(R.color.normal_row_color);
 		}
 
 		return rowView;
